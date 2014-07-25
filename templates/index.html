@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="{{ config.SITE_NAME }}" name="description">
+    <link href="favicon.ico" rel="icon"></link>
+    <title>{{ config.SITE_NAME }}</title>
+    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div id="wrap">
+        <div class="container">
+            <div class="page-header">
+                <h1><a href="{{ url_for('index') }}">{{ config.SITE_NAME }}</a></h1>
+            </div>
+            {% for issue in issues %}
+                <p class="issue">
+                    <h3><a class="issue-link" target="_blank" href="{{ config.REDMINE_URL }}/issues/{{ issue.id }}">Ticket n°{{ issue.id }}</a></h3>
+                    <p>
+                    <strong>Sujet:</strong><span class="red"> {{ issue.subject|capitalize }}</span><br>
+                        <strong>Description:</strong> {{ issue.description }}<br>
+                        <strong>Statut:</strong> {{ issue.status.name }}<br>
+                        <strong>Priorité:</strong> {{ issue.priority.name }}<br>
+                    </p>
+                    <p>
+                        <strong>Début:</strong> {{ issue.start_date.strftime('%d-%m-%Y') }}<br>
+                        <strong>Echéance:</strong>
+                        {% if issue.due_date %}
+                            {{ issue.due_date.strftime('%d-%m-%Y') }}
+                        {% else %}
+                            <em>Non communiquée</em>
+                        {% endif %}<br>
+                        <strong>Temps estimé:</strong>
+                        {% if issue.estimated_hours %}
+                            {{ issue.estimated_hours }} heures
+                        {% else %}
+                            <em>Non communiqué</em>
+                        {% endif %}<br>
+                        <strong>Réalisé:</strong> {{ issue.done_ratio }} %<br>
+
+                        <strong>{{ config.REDMINE_CUSTOM_FIELD }}</strong>:
+                        {% for c_fields in issue.custom_fields.resources %}
+                            {% for value in c_fields.value %}
+                                {{ value }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </p>
+                    {% if issue.journals.resources %}
+                    <p>
+                        <strong>Notes:</strong><br>
+                            {% for notes in issue.journals.resources %}
+                                {% if notes['notes'] %}
+                                    <u>Créée {{ notes['created_on'] | humanize_date }}</u> :<br>
+                                    {{ notes['notes'] }}
+                                <br>
+                                {% endif %}
+                            {% endfor %}
+                        <br>
+                    </p>
+                    {% endif %}
+                </p>
+            {% else %}
+                <strong>{{ config.SITE_NOSTATUS }}</strong>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

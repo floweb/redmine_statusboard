@@ -1,0 +1,35 @@
+a, a:hover {
+  color: #444;
+  text-decoration: none;
+  -moz-text-decoration-color: -moz-use-text-color;
+  -moz-text-decoration-line: none;
+  -moz-text-decoration-style: solid;
+  border-bottom: 1px dotted #999;
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+  border-bottom-color: #999;
+}
+
+a:hover {
+  border-bottom: 1px solid #1a92c6;
+  color: #1a92c6;
+}
+
+a.issue-link:hover {
+  border-bottom: 1px solid #c61a1a;
+  color: #c61a1a;
+}
+
+p {
+  font-family: Cambria, Georgia, serif
+}
+
+.red {
+  color: #c61a1a
+}
+
+.container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+}
